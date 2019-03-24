@@ -7,9 +7,7 @@ namespace Kontur.LogPacker
     public class LogPacker
     {
         private const string LineStartToken = "////LINE";
-        private const string DateStartToken = "////DATE";
-        private const string StatusStartToken = "////STAT";
-        private const string SentencesStartToken = "////SNTNS";
+        private const string CacheStartToken = "////CACHE";
         private const string CacheEndToken = "////END";
 
         private readonly Cache dateCache = new Cache();
@@ -21,25 +19,26 @@ namespace Kontur.LogPacker
             foreach (var line in sourceLines)
                 yield return PackLine(line);
 
+            yield return CacheStartToken;
             foreach (var line in GetCacheContents())
                 yield return line;
         }
 
         private IEnumerable<string> GetCacheContents()
         {
-            foreach (var line in dateCache.GetContents(DateStartToken, CacheEndToken))
-                yield return line;
-            
-            foreach (var line in statusCache.GetContents(StatusStartToken, CacheEndToken))
+            foreach (var line in dateCache.GetContents(CacheEndToken))
                 yield return line;
 
-            foreach (var line in sentencesCache.GetContents(SentencesStartToken, CacheEndToken))
+            foreach (var line in statusCache.GetContents(CacheEndToken))
+                yield return line;
+
+            foreach (var line in sentencesCache.GetContents(CacheEndToken))
                 yield return line;
         }
 
         private string PackLine(string source)
         {
-            var words = source.GetWordsWithIndices(new [] {' ', ','}).Take(6).ToList();
+            var words = source.GetWordsWithIndices(new[] {' ', ','}).Take(6).ToList();
 
             var logInfo = PackInfoPart(words.Select(w => w.substring).ToList());
 
@@ -49,7 +48,7 @@ namespace Kontur.LogPacker
             var descriptionIndex = words[5].index;
 
             var descriptionSentences = source
-                .GetWordsWithIndices(new[] {'.', '!', ':', ']'}, descriptionIndex, true)
+                .GetWordsWithIndices(new[] {'.', '!', ':', ']'}, descriptionIndex, true, false)
                 .Select(w => w.Item1)
                 .Select(sentence => sentencesCache.AddIfAbsent(sentence));
 

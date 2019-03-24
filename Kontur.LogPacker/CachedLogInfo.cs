@@ -1,11 +1,13 @@
-﻿namespace Kontur.LogPacker
+﻿using System.Numerics;
+
+namespace Kontur.LogPacker
 {
     internal class CachedLogInfo
     {
-        public ulong Date { get; set; }
-        public ulong FractionOfSecond { get; set; }
-        public ulong Status { get; set; }
-        public ulong Id { get; set; }
+        public BigInteger Date { get; set; }
+        public BigInteger FractionOfSecond { get; set; }
+        public BigInteger Id { get; set; }
+        public BigInteger Status { get; set; }
 
         public override string ToString()
             => $"{Date} {FractionOfSecond} {Id} {Status}";

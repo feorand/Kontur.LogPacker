@@ -25,7 +25,12 @@ namespace Kontur.LogPacker
 
         private static void UnpackFile(string sourceFilePath, string extractedFilePath)
         {
-            throw new NotImplementedException();
+            var compressedLines = File.ReadLines(sourceFilePath);
+            var extractedLines = new LogUnpacker().UnpackLines(compressedLines);
+
+            using (var writer = new StreamWriter(extractedFilePath))
+                foreach (var line in extractedLines)
+                    writer.WriteLine(line);
         }
     }
 }

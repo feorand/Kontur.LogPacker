@@ -11,7 +11,8 @@ namespace Kontur.LogPacker
             this string source, 
             char[] delimiters = null, 
             int startIndex = 0, 
-            bool shouldIncludeDelimiter = false)
+            bool shouldIncludeDelimiter = false,
+            bool shouldSkipEmpty = true)
         {
             if (startIndex >= source.Length)
                 throw new ArgumentException("Start index must be less than source length");
@@ -26,16 +27,16 @@ namespace Kontur.LogPacker
             {
                 if (delimiters.Contains(source[i]))
                 {
-                    if (currentWord.Length > 0)
+                    if (currentWord.Length > 0 || !shouldSkipEmpty)
                     {
                         if (shouldIncludeDelimiter)
                             currentWord.Append(source[i]);
 
                         yield return (currentWord.ToString(), currentIndex);
-                        currentWord = new StringBuilder();
-                        currentIndex = i + 1;
                     }
 
+                    currentWord = new StringBuilder();
+                    currentIndex = i + 1;
                     continue;
                 }
 
