@@ -35,10 +35,10 @@ namespace Kontur.LogPacker
 
             var parts = line.Split(' ', '|').Skip(1).ToList();
             var date = reverseDateCache[ulong.Parse(parts[0])];
-            var fractionOfSecond = parts[1];
-            var id = parts[2] + new string(' ', 6 - parts[2].Length % 6);
+            var fractionOfSecond = parts[1].PadLeft(3,'0');
+            var id = parts[2] + new string(' ', (6 - parts[2].Length) % 6);
             var statusFromCache = reverseStatusCache[ulong.Parse(parts[3])];
-            var status = statusFromCache + new string(' ', 5 - statusFromCache.Length % 5);
+            var status = statusFromCache + new string(' ', (5 - statusFromCache.Length) % 5);
 
             var descriptionParts = parts.Skip(4).Select(p => reverseSentenceCache[ulong.Parse(p)]);
 

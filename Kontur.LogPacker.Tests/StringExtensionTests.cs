@@ -6,6 +6,14 @@ namespace Kontur.LogPacker.Tests
     internal class StringExtensionTests
     {
         [Test]
+        public void ShouldParseEmptyString()
+        {
+            const string source = "";
+            var result = source.GetWordsWithIndices(new[] { ' ', ',' }).ToList();
+            Assert.AreEqual(0, result.Count);
+        }
+
+        [Test]
         public void ShouldParseOrdinaryString()
         {
             const string source = "a b,c";
@@ -23,5 +31,7 @@ namespace Kontur.LogPacker.Tests
             Assert.AreEqual(("a", 0), result[0]);
             Assert.AreEqual(("b", 3), result[1]);
         }
+
+        
     }
 }

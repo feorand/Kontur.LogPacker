@@ -35,6 +35,24 @@ namespace Kontur.LogPacker.Tests
         }
 
         [Test]
+        public void ShouldUnpackLineWithError()
+        {
+            var source = @"2018-11-13 00:02:41,470 971    ERROR [8c2d7d] ";
+            var packed = new LogPacker().PackLines(new[] { source });
+            var result = new LogUnpacker().UnpackLines(packed).ToList();
+            Assert.AreEqual(source, result.Single());
+        }
+
+        [Test]
+        public void ShouldUnpackLineWithZeroFraction()
+        {
+            var source = @"2018-11-13 00:02:42,049 1550   INFO  [8af469] Doing some complicated stuff.. Random numbers are: 1697805638, 1729846814, 1209281469.";
+            var packed = new LogPacker().PackLines(new[] { source });
+            var result = new LogUnpacker().UnpackLines(packed).ToList();
+            Assert.AreEqual(source, result.Single());
+        }
+
+        [Test]
         public void ShouldUnpackBinaryLine()
         {
             var source =
@@ -51,3 +69,5 @@ r9­»'V…HўЋ[ъЭй‚КM§ОБЏzгdeф¬1
         }
     }
 }
+
+

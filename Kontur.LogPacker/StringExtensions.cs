@@ -14,8 +14,11 @@ namespace Kontur.LogPacker
             bool shouldIncludeDelimiter = false,
             bool shouldSkipEmpty = true)
         {
+            if (source.Length == 0)
+                yield break;
+
             if (startIndex >= source.Length)
-                throw new ArgumentException("Start index must be less than source length");
+                throw new ArgumentException(source + " index > length");
 
             if (delimiters == null)
                 delimiters = new[] { ' ' };

@@ -11,6 +11,14 @@ namespace Kontur.LogPacker.Tests
         }
 
         [Test]
+        public void ShouldPackEmptyLine()
+        {
+            var source = "";
+            var result = new LogPacker().PackLines(new[] { source }).ToList();
+            Assert.AreEqual(5, result.Count);
+        }
+
+        [Test]
         public void ShouldPackSingleLine()
         {
             var source =
